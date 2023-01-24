@@ -17,4 +17,4 @@ jobs:
       uses: docker://docker:19.03.13
 
     - name: Run command
-      run: docker run --rm -v "$PWD":/app -w /app alpine sh -c "echo 'Hello, GitHub Actions in Docker!'"
+      run: docker run --rm -v "$PWD":/app -w /app we2app/cordova:latest sh -c "echo 'Hello, GitHub Actions in Docker!'"
