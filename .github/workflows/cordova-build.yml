@@ -23,7 +23,7 @@ jobs:
     #   run: docker create --name cordova we2app/cordova:latest
 
     - name: create container from image named we2app/cordova
-      run: docker run -it -v $(pwd):/app --name cordova we2app/cordova sh -c "cd /app && ls && cordova platform add android && cordova build android"
+      run: docker run -i -v $(pwd):/app --name cordova we2app/cordova sh -c "cd /app && ls && cordova platform add android && cordova build android"
 
     # - name: Copy current code to container
     #   run: docker cp . cordova:/app
