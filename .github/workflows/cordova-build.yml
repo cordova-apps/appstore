@@ -40,13 +40,9 @@ jobs:
     #   with:
     #     files: /platforms/android/app/build/outputs/apk/debug/app-debug.apk
 
-    - name: create a tag
-      run: git tag -a ${{ github.event.head_commit.message }} -m "Build for  ${{ github.event.head_commit.message }}"
-    
-    - name: push tag
-      run: git push origin ${{ github.event.head_commit.message }}
-      
     - name: Upload build to release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ github.event.head_commit.message }}
+        release_name: Release ${{ github.event.head_commit.message }}
         files: platforms/android/app/build/outputs/apk/debug/app-debug.apk
