@@ -19,11 +19,14 @@ jobs:
     # - name: Run command
     #   run: docker run --rm -v "$PWD":/app -w /app we2app/cordova:latest sh -c "echo 'Hello, GitHub Actions in Docker!'"
 
-    - name: Copy current code to container
-      run: docker cp . we2app/cordova:latest:/app 
+    - name: create container from image named we2app/cordova
+      run: docker create --name cordova we2app/cordova:latest
 
-    - name: Run command
-      run: docker run --rm -v "$PWD":/app -w /app we2app/cordova:latest sh -c "cordova build android"
+    - name: Copy current code to container
+      run: docker cp . cordova:/app
+
+    - name: Run build
+      run: docker start -a cordova sh -c "cordova build android"
 
     # - name: Copy build to current code
     #   run: docker cp we2app/cordova:/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk .
