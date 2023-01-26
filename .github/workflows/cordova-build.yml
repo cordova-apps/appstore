@@ -1,25 +1,37 @@
----
 name: Cordova Docker Action
+
 on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Docker
-        uses: docker://docker:19.03.13
-      - name: create container from image named we2app/cordova
-        run: docker run -i -v $(pwd):/app --name cordova we2app/cordova sh -c "cd /app
-          && export ANDROID_HOME=/opt/android-sdk && export
-          ANDROID_SDK_ROOT=/opt/android-sdk && export
-          PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools
-          && ls && cordova platform add android && cordova build android"
-      - name: Release
-        uses: softprops/action-gh-release@
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: /platforms/android/app/build/outputs/apk/debug/app-debug.apk
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Docker
+      uses: docker://docker:19.03.13
+
+    # - name: Run command
+    #   run: docker run --rm -v "$PWD":/app -w /app we2app/cordova:latest sh -c "echo 'Hello, GitHub Actions in Docker!'"
+
+    # - name: create container from image named we2app/cordova
+    #   run: docker create --name cordova we2app/cordova:latest
+
+    - name: create container from image named we2app/cordova
+      run: docker run -i -v $(pwd):/app --name cordova we2app/cordova sh -c "cd /app && export ANDROID_HOME=/opt/android-sdk && export ANDROID_SDK_ROOT=/opt/android-sdk && export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools && ls && cordova platform add android && cordova build android"
+
+    # - name: Upload build to release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     files: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      # if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: /platforms/android/app/build/outputs/apk/debug/app-debug.apk
