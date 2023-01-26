@@ -26,7 +26,7 @@ jobs:
       run: docker cp . cordova:/app
 
     - name: Run build
-      run: docker start -a cordova sh -c "cordova -v && cordova add platform android && cordova build android"
+      run: docker start -a cordova sh -c "cordova -v"
 
     # - name: Copy build to current code
     #   run: docker cp we2app/cordova:/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk .
