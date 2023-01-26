@@ -20,21 +20,21 @@ jobs:
     #   run: docker run --rm -v "$PWD":/app -w /app we2app/cordova:latest sh -c "echo 'Hello, GitHub Actions in Docker!'"
 
     - name: Copy current code to container
-      run: docker cp . we2app/cordova:/app 
+      run: docker cp . we2app/cordova:latest:/app 
 
     - name: Run command
       run: docker run --rm -v "$PWD":/app -w /app we2app/cordova:latest sh -c "cordova build android"
 
-    - name: Copy build to current code
-      run: docker cp we2app/cordova:/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk .
+    # - name: Copy build to current code
+    #   run: docker cp we2app/cordova:/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk .
 
-    - name: Upload build to artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: app-debug.apk
-        path: app-debug.apk
+    # - name: Upload build to artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: app-debug.apk
+    #     path: app-debug.apk
 
-    - name: Upload build to release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: app-debug.apk
+    # - name: Upload build to release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     files: app-debug.apk
