@@ -25,6 +25,11 @@ jobs:
     - name: create container from image named we2app/cordova
       run: docker run -i -v $(pwd):/app --name cordova we2app/cordova sh -c "cd /app && export ANDROID_HOME=/opt/android-sdk && export ANDROID_SDK_ROOT=/opt/android-sdk && export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools && ls && cordova platform add android && cordova build android"
 
+    - name: Upload build to release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        
     # - name: Copy current code to container
     #   run: docker cp . cordova:/app
 
