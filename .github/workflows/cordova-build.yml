@@ -25,34 +25,29 @@ jobs:
     - name: create container from image named we2app/cordova
       run: docker run -i -v $(pwd):/app --name cordova we2app/cordova sh -c "cd /app && export ANDROID_HOME=/opt/android-sdk && export ANDROID_SDK_ROOT=/opt/android-sdk && export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/:$ANDROID_HOME/platform-tools && ls && cordova platform add android && cordova build android"
 
-    - name: Upload build to release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: platforms/android/app/build/outputs/apk/debug/app-debug.apk
-        
-    # - name: Copy current code to container
-    #   run: docker cp . cordova:/app
-
-    # - name: run cordova container and open cli
-    #   run: docker start -a cordova
-
-    # - name: open container location to cli
-    #   run: docker exec -it cordova sh -c "cd /app && ls"
-
-
-    # - name: Run build
-    #   run: docker start -a cordova sh -c "cordova -v && cordova add platform android && cordova build android"
-
-    # - name: Copy build to current code
-    #   run: docker cp we2app/cordova:/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk .
-
-    # - name: Upload build to artifacts
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: app-debug.apk
-    #     path: app-debug.apk
-
     # - name: Upload build to release
     #   uses: softprops/action-gh-release@v1
     #   with:
-    #     files: app-debug.apk
+    #     files: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            tag_name: ${{ github.event.head_commit.message }}
+            release_name: Release ${{ github.event.head_commit.message }}
+            draft: false
+            prerelease: false
+            
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          asset_name: Debug ${{ github.event.head_commit.message }}.apk
+          asset_content_type: application/zip
