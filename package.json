@@ -1,6 +1,6 @@
 {
-  "name": "com.we2app.speedtest",
-  "displayName": "Speedtest",
+  "name": "com.we2app.appstore",
+  "displayName": "appstore",
   "version": "1.0.0",
   "description": "Test your network speed",
   "main": "index.js",
